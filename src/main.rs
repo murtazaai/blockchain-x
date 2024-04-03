@@ -104,6 +104,24 @@ impl Blockchain {
             true
         }
     }
+
+    fn is_chain_valid(&self, chain: &Vec<Block>) -> bool {
+        match chain.len() {
+            0 => println!("The chain is empty"),
+            1 => println!("The chain contains only genesis block"),
+            _ => {
+                for a in 1..chain.len() {
+                    let previous_block = chain.get(a-1).unwrap();
+                    let current_block = chain.get(a).unwrap();
+                    if !self.is_block_valid(current_block, previous_block) {
+                        return false;
+                    }
+                }
+            }
+        }
+        println!("The chain is valid.");
+        true
+    }
 }
 
 fn main() {
@@ -118,5 +136,24 @@ fn main() {
 
     blockchain.add_block(block);
 
+    blockchain.is_chain_valid(&blockchain.blocks);
+
     println!("{:?}", blockchain);
+
+    let block = Block::new(3, blockchain.blocks[0].hash.to_owned(), String::from("Data1"));
+
+    blockchain.add_block(block);
+
+    blockchain.is_chain_valid(&blockchain.blocks);
+
+    println!("{:?}", blockchain);
+
+    let block = Block::new(4, blockchain.blocks[0].hash.to_owned(), String::from("Data2"));
+
+    blockchain.add_block(block);
+
+    blockchain.is_chain_valid(&blockchain.blocks);
+
+    println!("{:?}", blockchain);
+
 }
