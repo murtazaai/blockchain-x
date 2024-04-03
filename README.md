@@ -1,1 +1,1 @@
-# blockchain-x
+# Simple Implementation of a Blockchain in Rust
