@@ -129,7 +129,7 @@ impl Blockchain {
         let is_local_valid = self.is_chain_valid(&local);
         let is_remote_valid = self.is_chain_valid(&remote);
 
-        return match (is_local_valid, is_remote_valid) {
+        match (is_local_valid, is_remote_valid) {
             (true, true) => {
                 if local.len() >= remote.len() {
                     println!("The local copy is valid.");
@@ -163,7 +163,7 @@ fn main() {
 
     println!("{:?}", blockchain);
 
-    let block = Block::new(2, blockchain.blocks[0].hash.to_owned(), String::from("Data"));
+    let block = Block::new(2, blockchain.blocks[blockchain.blocks.len()-1].hash.to_owned(), String::from("Data"));
 
     blockchain.add_block(block);
 
@@ -173,7 +173,7 @@ fn main() {
 
     println!("{:?}", blockchain);
 
-    let block = Block::new(3, blockchain.blocks[1].hash.to_owned(), String::from("Data1"));
+    let block = Block::new(3, blockchain.blocks[blockchain.blocks.len()-1].hash.to_owned(), String::from("Data1"));
 
     blockchain.add_block(block);
 
@@ -183,7 +183,7 @@ fn main() {
 
     println!("{:?}", blockchain);
 
-    let block = Block::new(4, blockchain.blocks[2].hash.to_owned(), String::from("Data2"));
+    let block = Block::new(4, blockchain.blocks[blockchain.blocks.len()-1].hash.to_owned(), String::from("Data2"));
 
     blockchain.add_block(block);
 
