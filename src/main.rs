@@ -74,14 +74,15 @@ impl Blockchain {
     }
 
     fn add_block(&mut self, block: Block) {
-        match self.blocks.last() {
+        let last_block = self.blocks.last();
+        match last_block {
             None => self.genesis_block(),
             Some(last_block) => {
                 if self.is_block_valid(&block, last_block) {
                     self.blocks.push(block);
-                    println!("Block has been successfully added to the blockchain.")
+                    println!("Block has been successfully added to the blockchain.");
                 } else {
-                    println!("Block could not be added to the blockchain. Invalid block.")
+                    println!("Block could not be added to the blockchain. Invalid block.");
                 }
             }
         }
@@ -101,6 +102,7 @@ impl Blockchain {
             println!("Block with id: {} has an invalid hash", block.id);
             false
         } else {
+            println!("The block is valid.");
             true
         }
     }
