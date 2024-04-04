@@ -124,6 +124,35 @@ impl Blockchain {
         println!("The chain is valid.");
         true
     }
+
+    fn chain_selector(&self, local: Vec<Block>, remote: Vec<Block>) -> Option<Vec<Block>> {
+        let is_local_valid = self.is_chain_valid(&local);
+        let is_remote_valid = self.is_chain_valid(&remote);
+
+        return match (is_local_valid, is_remote_valid) {
+            (true, true) => {
+                if local.len() >= remote.len() {
+                    println!("The local copy is valid.");
+                    Some(local)
+                } else {
+                    println!("Remote copy is valid.");
+                    Some(remote)
+                }
+            },
+            (true, false) => {
+                println!("The local copy is valid returning local copy.");
+                Some(local)
+            },
+            (false, true) => {
+                println!("The remote copy is valid returning remote copy.");
+                Some(remote)
+            },
+            (false, false) => {
+                println!("Both local and remote copies are invalid");
+                None
+            },
+        }
+    }
 }
 
 fn main() {
@@ -140,21 +169,27 @@ fn main() {
 
     blockchain.is_chain_valid(&blockchain.blocks);
 
+    blockchain.blocks = blockchain.chain_selector(blockchain.blocks.to_owned(), blockchain.blocks.to_owned()).unwrap();
+
     println!("{:?}", blockchain);
 
-    let block = Block::new(3, blockchain.blocks[0].hash.to_owned(), String::from("Data1"));
+    let block = Block::new(3, blockchain.blocks[1].hash.to_owned(), String::from("Data1"));
 
     blockchain.add_block(block);
 
     blockchain.is_chain_valid(&blockchain.blocks);
 
+    blockchain.blocks = blockchain.chain_selector(blockchain.blocks.to_owned(), blockchain.blocks.to_owned()).unwrap();
+
     println!("{:?}", blockchain);
 
-    let block = Block::new(4, blockchain.blocks[0].hash.to_owned(), String::from("Data2"));
+    let block = Block::new(4, blockchain.blocks[2].hash.to_owned(), String::from("Data2"));
 
     blockchain.add_block(block);
 
     blockchain.is_chain_valid(&blockchain.blocks);
+
+    blockchain.blocks = blockchain.chain_selector(blockchain.blocks.to_owned(), blockchain.blocks.to_owned()).unwrap();
 
     println!("{:?}", blockchain);
 
